@@ -577,29 +577,22 @@ export const StatsDashboard: React.FC<StatsDashboardProps> = ({
         {!isComparisonCollapsed && (
           <div className="space-y-5 animate-fadeIn">
 
-        {/* Filter Controls: Difficulty Filter + Search Bar */}
+        {/* Controls: Search Bar (Left) + Difficulty Filter (Right) */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-1">
-          <div className="flex items-center gap-2 text-xs font-semibold text-gray-400">
-            {compareFilter !== 'all' ? (
-              <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 text-xs">
-                <span>Filtering: <strong>{compareFilter === 'both' ? 'Both Complete' : compareFilter.toUpperCase()}</strong></span>
-                <button
-                  type="button"
-                  onClick={() => setCompareFilter('all')}
-                  className="hover:text-white text-indigo-400 font-bold ml-0.5"
-                  title="Clear filter"
-                >
-                  ✕
-                </button>
-              </span>
-            ) : (
-              <span className="text-[11px] text-gray-500">
-                All {comparedDemons.length} demons shown
-              </span>
-            )}
+          {/* Search Box on Left */}
+          <div className="relative flex-1 max-w-xs sm:w-64">
+            <Search className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              placeholder="Search demons or ID..."
+              value={compareSearch}
+              onChange={(e) => setCompareSearch(e.target.value)}
+              className="w-full bg-[#11121d] border border-[#272a40] focus:border-indigo-500 rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder-gray-500 focus:outline-none transition-colors"
+            />
           </div>
 
-          <div className="flex items-center gap-2.5 flex-wrap sm:flex-nowrap">
+          {/* Right Controls: Difficulty Filter */}
+          <div className="flex items-center gap-2.5">
             {/* Difficulty Filter Dropdown (like Showcase) */}
             <div className="relative min-w-[155px]">
               <select
@@ -616,18 +609,6 @@ export const StatsDashboard: React.FC<StatsDashboardProps> = ({
               </select>
               <Filter className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
               <ChevronDown className="w-3 h-3 absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-            </div>
-
-            {/* Search Box */}
-            <div className="relative min-w-[180px] sm:w-56">
-              <Search className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                placeholder="Search demons or ID..."
-                value={compareSearch}
-                onChange={(e) => setCompareSearch(e.target.value)}
-                className="w-full bg-[#11121d] border border-[#272a40] focus:border-indigo-500 rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder-gray-500 focus:outline-none transition-colors"
-              />
             </div>
 
             {/* Filtered count badge */}
