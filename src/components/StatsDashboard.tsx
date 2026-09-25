@@ -474,21 +474,83 @@ export const StatsDashboard: React.FC<StatsDashboardProps> = ({
             </span>
           </div>
 
-          {/* Quick Stats Badges & Collapse Arrow */}
-          <div className="flex items-center gap-3">
-            <div className="flex flex-wrap items-center gap-2 text-xs">
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 font-semibold shadow-sm">
+          {/* Quick Stats / Filter Tabs & Collapse Arrow */}
+          <div className="flex items-center gap-2.5">
+            <div className="flex flex-wrap items-center gap-1.5 text-xs">
+              {/* All */}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setCompareFilter('all');
+                  if (isComparisonCollapsed) setIsComparisonCollapsed(false);
+                }}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold transition-all text-xs cursor-pointer border ${
+                  compareFilter === 'all'
+                    ? 'bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-lg shadow-indigo-600/30 border-indigo-400/50'
+                    : 'bg-[#181a29] hover:bg-[#202235] text-gray-400 hover:text-white border-[#282a3e]'
+                }`}
+                title="Show all unique demons"
+              >
+                <span>All: <strong className="font-mono text-white">{comparedDemons.length}</strong></span>
+              </button>
+
+              {/* Both Complete */}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setCompareFilter(compareFilter === 'both' ? 'all' : 'both');
+                  if (isComparisonCollapsed) setIsComparisonCollapsed(false);
+                }}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold transition-all text-xs cursor-pointer border ${
+                  compareFilter === 'both'
+                    ? 'bg-emerald-500/25 border-emerald-400 text-emerald-200 shadow-[0_0_14px_rgba(16,185,129,0.35)]'
+                    : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/20'
+                }`}
+                title="Filter demons both players completed"
+              >
                 <CheckCircle2 className="w-3.5 h-3.5" />
-                <span>Both Complete: <strong className="text-white font-mono">{bothBeatenCount}</strong></span>
-              </div>
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 font-semibold shadow-sm">
+                <span>Both Complete: <strong className="font-mono text-white">{bothBeatenCount}</strong></span>
+              </button>
+
+              {/* Ashrit */}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setCompareFilter(compareFilter === 'ashrit' ? 'all' : 'ashrit');
+                  if (isComparisonCollapsed) setIsComparisonCollapsed(false);
+                }}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold transition-all text-xs cursor-pointer border ${
+                  compareFilter === 'ashrit'
+                    ? 'bg-indigo-500/25 border-indigo-400 text-indigo-200 shadow-[0_0_14px_rgba(99,102,241,0.35)]'
+                    : 'bg-indigo-500/10 border-indigo-500/30 text-indigo-300 hover:bg-indigo-500/20'
+                }`}
+                title="Filter demons Ashrit completed"
+              >
                 <Flame className="w-3.5 h-3.5 text-indigo-400" />
-                <span>Ashrit: <strong className="text-white font-mono">{ashritTotalBeaten}</strong></span>
-              </div>
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-300 font-semibold shadow-sm">
+                <span>Ashrit: <strong className="font-mono text-white">{ashritTotalBeaten}</strong></span>
+              </button>
+
+              {/* Arsh */}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setCompareFilter(compareFilter === 'arsh' ? 'all' : 'arsh');
+                  if (isComparisonCollapsed) setIsComparisonCollapsed(false);
+                }}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold transition-all text-xs cursor-pointer border ${
+                  compareFilter === 'arsh'
+                    ? 'bg-red-500/25 border-red-400 text-red-200 shadow-[0_0_14px_rgba(239,68,68,0.35)]'
+                    : 'bg-red-500/10 border-red-500/30 text-red-300 hover:bg-red-500/20'
+                }`}
+                title="Filter demons Arsh completed"
+              >
                 <Target className="w-3.5 h-3.5 text-red-400" />
-                <span>Arsh: <strong className="text-white font-mono">{arshTotalBeaten}</strong></span>
-              </div>
+                <span>Arsh: <strong className="font-mono text-white">{arshTotalBeaten}</strong></span>
+              </button>
             </div>
 
             {/* Collapse toggle button */}
@@ -515,37 +577,28 @@ export const StatsDashboard: React.FC<StatsDashboardProps> = ({
         {!isComparisonCollapsed && (
           <div className="space-y-5 animate-fadeIn">
 
-        {/* Filter Controls: Player Tabs, Demon Rating Filter, Search Bar */}
-        <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 pt-1">
-          {/* Player Filter Pills */}
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 lg:pb-0 scrollbar-none">
-            {(['all', 'both', 'ashrit', 'arsh'] as const).map((filter) => {
-              const label =
-                filter === 'all'
-                  ? `All (${comparedDemons.length})`
-                  : filter === 'both'
-                  ? `Both (${bothBeatenCount})`
-                  : filter === 'ashrit'
-                  ? `Ashrit (${ashritTotalBeaten})`
-                  : `Arsh (${arshTotalBeaten})`;
-              const active = compareFilter === filter;
-              return (
+        {/* Filter Controls: Difficulty Filter + Search Bar */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-1">
+          <div className="flex items-center gap-2 text-xs font-semibold text-gray-400">
+            {compareFilter !== 'all' ? (
+              <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 text-xs">
+                <span>Filtering: <strong>{compareFilter === 'both' ? 'Both Complete' : compareFilter.toUpperCase()}</strong></span>
                 <button
-                  key={filter}
-                  onClick={() => setCompareFilter(filter)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
-                    active
-                      ? 'bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-lg shadow-indigo-600/30 border border-indigo-400/40'
-                      : 'bg-[#191b29] hover:bg-[#202235] text-gray-400 hover:text-white border border-[#27293d]'
-                  }`}
+                  type="button"
+                  onClick={() => setCompareFilter('all')}
+                  className="hover:text-white text-indigo-400 font-bold ml-0.5"
+                  title="Clear filter"
                 >
-                  {label}
+                  ✕
                 </button>
-              );
-            })}
+              </span>
+            ) : (
+              <span className="text-[11px] text-gray-500">
+                All {comparedDemons.length} demons shown
+              </span>
+            )}
           </div>
 
-          {/* Right Controls: Difficulty Filter + Search Box */}
           <div className="flex items-center gap-2.5 flex-wrap sm:flex-nowrap">
             {/* Difficulty Filter Dropdown (like Showcase) */}
             <div className="relative min-w-[155px]">
