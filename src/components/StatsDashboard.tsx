@@ -482,10 +482,12 @@ export const StatsDashboard: React.FC<StatsDashboardProps> = ({
                 <span>Both Complete: <strong className="text-white font-mono">{bothBeatenCount}</strong></span>
               </div>
               <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 font-semibold shadow-sm">
-                <span>Ashrit Beaten: <strong className="text-white font-mono">{ashritTotalBeaten}</strong></span>
+                <Flame className="w-3.5 h-3.5 text-indigo-400" />
+                <span>Ashrit: <strong className="text-white font-mono">{ashritTotalBeaten}</strong></span>
               </div>
               <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-300 font-semibold shadow-sm">
-                <span>Arsh Beaten: <strong className="text-white font-mono">{arshTotalBeaten}</strong></span>
+                <Target className="w-3.5 h-3.5 text-red-400" />
+                <span>Arsh: <strong className="text-white font-mono">{arshTotalBeaten}</strong></span>
               </div>
             </div>
 
@@ -522,10 +524,10 @@ export const StatsDashboard: React.FC<StatsDashboardProps> = ({
                 filter === 'all'
                   ? `All (${comparedDemons.length})`
                   : filter === 'both'
-                  ? `Both Complete (${bothBeatenCount})`
+                  ? `Both (${bothBeatenCount})`
                   : filter === 'ashrit'
-                  ? `Ashrit Beaten (${ashritTotalBeaten})`
-                  : `Arsh Beaten (${arshTotalBeaten})`;
+                  ? `Ashrit (${ashritTotalBeaten})`
+                  : `Arsh (${arshTotalBeaten})`;
               const active = compareFilter === filter;
               return (
                 <button
